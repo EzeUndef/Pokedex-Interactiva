@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0a0a0f;
+  min-height: 100vh;
+  color: #f1f5f9;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Hide scrollbar for type filter */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Type badge colors */
+.type-normal { background: #919AA2; }
+.type-fire { background: #FF9D55; }
+.type-water { background: #5090D6; }
+.type-electric { background: #F4D23C; color: #1a1a2e; }
+.type-grass { background: #63BC5A; }
+.type-ice { background: #73CEC0; color: #1a1a2e; }
+.type-fighting { background: #CE416B; }
+.type-poison { background: #B567CE; }
+.type-ground { background: #D97845; }
+.type-flying { background: #89AAE3; }
+.type-psychic { background: #FA7179; }
+.type-bug { background: #91C12F; }
+.type-rock { background: #C5B78C; color: #1a1a2e; }
+.type-ghost { background: #5269AD; }
+.type-dragon { background: #0B6DC3; }
+.type-dark { background: #5A5465; }
+.type-steel { background: #5A8EA2; }
+.type-fairy { background: #EC8FE6; }
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-12px) scale(1.02); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1a1a2e 25%, #252545 50%, #1a1a2e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* Stat bar animation */
+.stat-bar-fill {
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(15, 15, 30, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-card {
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Card 3D hover */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-3d:hover {
+  transform: translateY(-8px) rotateX(2deg);
+}
+
+/* Glow effects */
+.glow-red {
+  box-shadow: 0 0 40px rgba(239, 68, 68, 0.15);
+}
+
+.glow-type-normal { box-shadow: 0 4px 20px rgba(145, 154, 162, 0.3); }
+.glow-type-fire { box-shadow: 0 4px 20px rgba(255, 157, 85, 0.3); }
+.glow-type-water { box-shadow: 0 4px 20px rgba(80, 144, 214, 0.3); }
+.glow-type-electric { box-shadow: 0 4px 20px rgba(244, 210, 60, 0.3); }
+.glow-type-grass { box-shadow: 0 4px 20px rgba(99, 188, 90, 0.3); }
+.glow-type-ice { box-shadow: 0 4px 20px rgba(115, 206, 192, 0.3); }
+.glow-type-fighting { box-shadow: 0 4px 20px rgba(206, 65, 107, 0.3); }
+.glow-type-poison { box-shadow: 0 4px 20px rgba(181, 103, 206, 0.3); }
+.glow-type-ground { box-shadow: 0 4px 20px rgba(217, 120, 69, 0.3); }
+.glow-type-flying { box-shadow: 0 4px 20px rgba(137, 170, 227, 0.3); }
+.glow-type-psychic { box-shadow: 0 4px 20px rgba(250, 113, 121, 0.3); }
+.glow-type-bug { box-shadow: 0 4px 20px rgba(145, 193, 47, 0.3); }
+.glow-type-rock { box-shadow: 0 4px 20px rgba(197, 183, 140, 0.3); }
+.glow-type-ghost { box-shadow: 0 4px 20px rgba(82, 105, 173, 0.3); }
+.glow-type-dragon { box-shadow: 0 4px 20px rgba(11, 109, 195, 0.3); }
+.glow-type-dark { box-shadow: 0 4px 20px rgba(90, 84, 101, 0.3); }
+.glow-type-steel { box-shadow: 0 4px 20px rgba(90, 142, 162, 0.3); }
+.glow-type-fairy { box-shadow: 0 4px 20px rgba(236, 143, 230, 0.3); }
