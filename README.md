@@ -85,7 +85,7 @@ El chasis del dispositivo se adapta visualmente según la región seleccionada:
 
 1. Clonar o acceder a la carpeta del proyecto:
    ```bash
-   cd "/home/ecuellar/Documentos/Pokedex Interactiva"
+   cd "/home/tuusuario/Documentos/Pokedex Interactiva"
    ```
 
 2. Instalar dependencias:
