@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, Music, BookOpen, Users, Swords } from 'lucide-react';
+import { Volume2, VolumeX, Music, BookOpen, Users, Swords, HelpCircle } from 'lucide-react';
 import { isSfxEnabled, setSfxEnabled, toggleBgm, isBgmPlaying, playSound } from '../services/audioService';
 import { useState } from 'react';
 
@@ -56,7 +56,7 @@ export default function PokedexFrame({ children, version, currentView, onSelectV
           </div>
         </div>
 
-        {/* Center navigation tabs (Pokédex, Equipo, Comparador) */}
+        {/* Center navigation tabs (Pokédex, Equipo, Comparador, Trivia) */}
         <div className="flex items-center gap-1 bg-black/30 p-1 rounded-xl">
           <button
             onClick={() => handleNav('pokedex')}
@@ -96,11 +96,22 @@ export default function PokedexFrame({ children, version, currentView, onSelectV
             <Swords className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Comparador</span>
           </button>
+
+          <button
+            onClick={() => handleNav('minigame')}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+              currentView === 'minigame'
+                ? 'bg-yellow-400 text-slate-900 shadow'
+                : 'text-white/70 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Trivia</span>
+          </button>
         </div>
 
         {/* Audio controls (SFX + Chiptune BGM) */}
         <div className="flex items-center gap-1.5">
-          {/* Chiptune Music Button */}
           <button
             onClick={handleToggleBgm}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold transition-all ${
@@ -114,7 +125,6 @@ export default function PokedexFrame({ children, version, currentView, onSelectV
             <span className="hidden md:inline text-[10px]">Música</span>
           </button>
 
-          {/* Sound FX Button */}
           <button
             onClick={handleToggleSfx}
             className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${

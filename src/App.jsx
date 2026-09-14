@@ -8,6 +8,7 @@ import PokemonGrid from './components/PokemonGrid';
 import PokemonModal from './components/PokemonModal';
 import TeamBuilder from './components/TeamBuilder';
 import PokemonComparator from './components/PokemonComparator';
+import WhosThatPokemon from './components/WhosThatPokemon';
 import {
   fetchPokemonList,
   fetchPokemonCard,
@@ -22,7 +23,7 @@ import { playSound } from './services/audioService';
 const PAGE_SIZE = 36;
 
 export default function App() {
-  // Vista activa: 'pokedex' | 'team' | 'compare'
+  // Vista activa: 'pokedex' | 'team' | 'compare' | 'minigame'
   const [currentView, setCurrentView] = useState('pokedex');
 
   // Modelo de la Pokédex estética (Kanto, Johto, Hoenn...)
@@ -38,7 +39,7 @@ export default function App() {
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  // Lista maestra de los 1025 Pokémon (para búsqueda instantánea)
+  // Lista maestra de los 1025 Pokémon
   const [masterList, setMasterList] = useState([]);
 
   // Búsqueda y filtros
@@ -104,7 +105,6 @@ export default function App() {
     }
   }, []);
 
-  // Al cambiar de generación, reiniciar listado con esa generación
   useEffect(() => {
     loadPokemonForGen(selectedGen, 0, true);
   }, [selectedGen, loadPokemonForGen]);
@@ -158,6 +158,19 @@ export default function App() {
     saveTeam([]);
   };
 
+  const handleImportTeam = async (nameList = []) => {
+    try {
+      const importedCards = await Promise.all(
+        nameList.slice(0, 6).map(name => fetchPokemonCard(name).catch(() => null))
+      );
+      const valid = importedCards.filter(Boolean);
+      setTeam(valid);
+      saveTeam(valid);
+    } catch (err) {
+      console.error('Error al importar equipo:', err);
+    }
+  };
+
   // Iniciar Comparador con un Pokémon
   const handleCompareWith = (pokemon) => {
     setCompareA(pokemon);
@@ -184,6 +197,7 @@ export default function App() {
           name: details.name,
           types: details.types,
           sprite: details.sprites.artwork || details.sprites.front,
+          shinySprite: details.sprites.shinyArtwork,
         });
       } catch (err) {
         console.error('Error al obtener Pokémon aleatorio:', err);
@@ -191,14 +205,12 @@ export default function App() {
     }
   };
 
-  // Filtrado y ordenamiento de Pokémon
+  // Filtrado y ordenamiento
   const filteredAndSortedPokemon = useMemo(() => {
     let list = [...allPokemon];
 
-    // Búsqueda instantánea en los 1025 Pokémon
     if (searchTerm.trim()) {
       const term = searchTerm.trim().toLowerCase();
-      // Si la búsqueda no está en la lista visible pero sí en la lista maestra, buscar coincidencias
       const matchingMaster = masterList.filter(
         p => p.name.toLowerCase().includes(term) || String(p.id) === term
       );
@@ -206,7 +218,6 @@ export default function App() {
       if (matchingMaster.length > 0) {
         const currentIds = new Set(list.map(p => p.id));
         const missingFromView = matchingMaster.filter(m => !currentIds.has(m.id));
-        // Agregar los primeros matches encontrados que faltaban
         list = [...missingFromView.slice(0, 12), ...list];
       }
 
@@ -215,17 +226,14 @@ export default function App() {
       );
     }
 
-    // Filtrar por favoritos
     if (showFavorites) {
       list = list.filter(p => favorites.has(p.id));
     }
 
-    // Filtrar por tipo
     if (selectedType) {
       list = list.filter(p => p.types.some(t => t.name === selectedType));
     }
 
-    // Ordenar
     list.sort((a, b) => {
       if (sortBy === 'id-asc') return a.id - b.id;
       if (sortBy === 'id-desc') return b.id - a.id;
@@ -237,7 +245,6 @@ export default function App() {
     return list;
   }, [allPokemon, masterList, searchTerm, showFavorites, favorites, selectedType, sortBy]);
 
-  // Tecla ESC para cerrar modal
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') setSelectedPokemon(null);
@@ -276,13 +283,11 @@ export default function App() {
         {/* Vista: Pokédex Principal */}
         {currentView === 'pokedex' && (
           <>
-            {/* Pestañas de Generación (Kanto a Paldea: 1 al 1025) */}
             <GenerationTabs
               selectedGen={selectedGen}
               onSelectGen={setSelectedGen}
             />
 
-            {/* Header con búsqueda, favoritos y azar */}
             <Header
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
@@ -296,7 +301,6 @@ export default function App() {
               favCount={favorites.size}
             />
 
-            {/* Filtro por tipo y ordenamiento */}
             <TypeFilter
               selectedType={selectedType}
               onTypeChange={(t) => {
@@ -310,7 +314,6 @@ export default function App() {
               }}
             />
 
-            {/* Grid de Pokémon */}
             <div className="flex-1">
               <PokemonGrid
                 pokemons={filteredAndSortedPokemon}
@@ -329,13 +332,14 @@ export default function App() {
           </>
         )}
 
-        {/* Vista: Mi Equipo (Team Builder) */}
+        {/* Vista: Mi Equipo */}
         {currentView === 'team' && (
           <TeamBuilder
             team={team}
             onRemoveFromTeam={handleRemoveFromTeam}
             onClearTeam={handleClearTeam}
             onSelectPokemon={setSelectedPokemon}
+            onImportTeam={handleImportTeam}
             onClose={() => setCurrentView('pokedex')}
           />
         )}
@@ -345,8 +349,16 @@ export default function App() {
           <PokemonComparator
             initialPokeA={compareA}
             initialPokeB={compareB}
-            allPokemon={allPokemon}
+            masterList={masterList}
             onClose={() => setCurrentView('pokedex')}
+          />
+        )}
+
+        {/* Vista: Mini-Juego Trivia */}
+        {currentView === 'minigame' && (
+          <WhosThatPokemon
+            allPokemon={allPokemon}
+            masterList={masterList}
           />
         )}
 

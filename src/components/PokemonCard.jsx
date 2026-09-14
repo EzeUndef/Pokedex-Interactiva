@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, Plus, Check, Swords } from 'lucide-react';
+import { Heart, Plus, Check, Swords, Sparkles } from 'lucide-react';
 import { formatPokedexNumber, getTypeColor } from '../utils/helpers';
 import { playSound } from '../services/audioService';
 
@@ -14,6 +14,7 @@ export default function PokemonCard({
   onCompareWith,
 }) {
   const [loaded, setLoaded] = useState(false);
+  const [isShiny, setIsShiny] = useState(false);
   const mainType = pokemon.types[0]?.name || 'normal';
   const color = getTypeColor(mainType);
 
@@ -30,11 +31,8 @@ export default function PokemonCard({
 
   const handleTeam = (e) => {
     e.stopPropagation();
-    if (isInTeam) {
-      playSound.remove();
-    } else {
-      playSound.add();
-    }
+    if (isInTeam) playSound.remove();
+    else playSound.add();
     onToggleTeam(pokemon);
   };
 
@@ -44,11 +42,19 @@ export default function PokemonCard({
     onCompareWith(pokemon);
   };
 
+  const handleToggleShiny = (e) => {
+    e.stopPropagation();
+    playSound.click();
+    setIsShiny(prev => !prev);
+  };
+
+  const spriteUrl = isShiny ? pokemon.shinySprite || pokemon.sprite : pokemon.sprite;
+
   return (
     <div
       onClick={handleCardClick}
       className="group cursor-pointer animate-fade-in-up"
-      style={{ animationDelay: `${(index % 24) * 25}ms` }}
+      style={{ animationDelay: `${(index % 24) * 20}ms` }}
     >
       <div
         className="relative overflow-hidden rounded-2xl border border-white/[.06] bg-white/[.03] hover:bg-white/[.07] transition-all duration-300 hover:-translate-y-1"
@@ -74,6 +80,17 @@ export default function PokemonCard({
             </span>
 
             <div className="flex items-center gap-1">
+              {/* Shiny Toggle */}
+              <button
+                onClick={handleToggleShiny}
+                className={`w-6 h-6 flex items-center justify-center rounded-md transition-all ${
+                  isShiny ? 'text-yellow-300 bg-yellow-400/20' : 'text-white/20 hover:text-yellow-300'
+                }`}
+                title="Variocolor Shiny ✨"
+              >
+                <Sparkles className="w-3 h-3" />
+              </button>
+
               {/* Compare Button */}
               {onCompareWith && (
                 <button
@@ -115,13 +132,10 @@ export default function PokemonCard({
 
           {/* Sprite image */}
           <div className="flex justify-center py-2">
-            {!loaded && <div className="w-24 h-24 skeleton rounded-full" />}
             <img
-              src={pokemon.sprite}
+              src={spriteUrl}
               alt={pokemon.name}
-              className={`w-24 h-24 object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300 ${
-                loaded ? '' : 'opacity-0 absolute'
-              }`}
+              className="w-24 h-24 object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
               onLoad={() => setLoaded(true)}
             />

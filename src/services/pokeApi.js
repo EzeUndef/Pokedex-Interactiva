@@ -27,7 +27,6 @@ export const TYPE_COLORS = {
   steel:'#5A8EA2',fairy:'#EC8FE6',
 };
 
-/* ── Pokédex versions / skins ── */
 export const POKEDEX_VERSIONS = [
   { id: 'kanto',  label: 'Kanto',  gen: 'I',    css: 'pokedex-kanto',  range: [1, 151] },
   { id: 'johto',  label: 'Johto',  gen: 'II',   css: 'pokedex-johto',  range: [152, 251] },
@@ -40,7 +39,6 @@ export const POKEDEX_VERSIONS = [
   { id: 'paldea', label: 'Paldea', gen: 'IX',   css: 'pokedex-paldea', range: [906, 1025] },
 ];
 
-/* ── Generaciones de Pokémon (Kanto a Paldea) ── */
 export const GENERATIONS = [
   { id: 'all',  label: 'Todas',   range: [1, 1025], region: 'Nacional' },
   { id: 'gen1', label: 'Gen I',   range: [1, 151],    region: 'Kanto' },
@@ -54,7 +52,6 @@ export const GENERATIONS = [
   { id: 'gen9', label: 'Gen IX',  range: [906, 1025], region: 'Paldea' },
 ];
 
-/* ── Tabla de Efectividades Elementales (Daño que recibe el defensor) ── */
 export const TYPE_CHART = {
   normal:   { rock: 0.5, ghost: 0, steel: 0.5 },
   fire:     { fire: 0.5, water: 0.5, grass: 2, ice: 2, bug: 2, rock: 0.5, dragon: 0.5, steel: 2 },
@@ -76,13 +73,8 @@ export const TYPE_CHART = {
   fairy:    { fire: 0.5, fighting: 2, poison: 0.5, dragon: 2, dark: 2, steel: 0.5 },
 };
 
-/* ── API calls ── */
-
 let masterListCache = null;
 
-/**
- * Obtiene la lista completa de los 1025 Pokémon (ID, Nombre y Sprite oficial).
- */
 export async function fetchAllPokemonMasterList() {
   if (masterListCache) return masterListCache;
   try {
@@ -93,12 +85,12 @@ export async function fetchAllPokemonMasterList() {
         id,
         name: p.name,
         sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
-        types: [], // Se enriquece al cargar el card o el modal
+        types: [],
       };
     });
     return masterListCache;
   } catch (err) {
-    console.error('Error cargando lista maestra de Pokémon:', err);
+    console.error('Error cargando lista maestra:', err);
     return [];
   }
 }
@@ -128,9 +120,19 @@ export async function fetchPokemonDetails(idOrName) {
     sprites: {
       front: data.sprites.front_default,
       artwork: data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default,
+      shinyArtwork: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${data.id}.png`,
       showdown: data.sprites.other?.showdown?.front_default || null,
     },
     abilities: data.abilities.map(a => ({ name: a.ability.name, isHidden: a.is_hidden })),
+    moves: data.moves.map(m => {
+      const latestDetails = m.version_group_details[m.version_group_details.length - 1];
+      return {
+        name: m.move.name.replace(/-/g, ' '),
+        rawName: m.move.name,
+        learnMethod: latestDetails?.move_learn_method?.name || 'level-up',
+        levelLearnedAt: latestDetails?.level_learned_at || 0,
+      };
+    }),
     cries: data.cries,
     gameIndices: data.game_indices?.map(g => g.version.name) || [],
   };
@@ -160,6 +162,11 @@ export async function fetchPokemonSpecies(id) {
     baseHappiness: data.base_happiness,
     growthRate: data.growth_rate?.name || null,
     evolutionChainUrl: data.evolution_chain?.url || null,
+    varieties: data.varieties?.map(v => ({
+      name: v.pokemon.name,
+      isDefault: v.is_default,
+      url: v.pokemon.url,
+    })) || [],
   };
 }
 
@@ -219,6 +226,7 @@ export async function fetchPokemonCard(urlOrId) {
       value: s.base_stat,
     })),
     sprite: data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default,
+    shinySprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${data.id}.png`,
   };
 }
 

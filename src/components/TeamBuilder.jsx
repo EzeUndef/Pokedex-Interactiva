@@ -1,8 +1,14 @@
-import { Trash2, ShieldAlert, ShieldCheck, Zap, Plus, X } from 'lucide-react';
+import { useState } from 'react';
+import { Trash2, ShieldAlert, Plus, X, Download, Upload, Copy, Check } from 'lucide-react';
 import { formatPokedexNumber, getTypeColor, calculateTeamWeaknesses } from '../utils/helpers';
 import { playSound } from '../services/audioService';
 
-export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSelectPokemon, onClose }) {
+export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSelectPokemon, onImportTeam, onClose }) {
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importText, setImportText] = useState('');
+  const [copied, setCopied] = useState(false);
+
   const weaknesses = calculateTeamWeaknesses(team);
   const slots = Array.from({ length: 6 }).map((_, i) => team[i] || null);
 
@@ -15,6 +21,44 @@ export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSel
     if (window.confirm('¿Seguro que deseas vaciar tu equipo?')) {
       playSound.remove();
       onClearTeam();
+    }
+  };
+
+  // Generar formato Pokémon Showdown
+  const generateShowdownExport = () => {
+    return team.map(poke => {
+      const typeStr = poke.types.map(t => t.nameEs).join('/');
+      return `${poke.name} (${poke.types[0]?.nameEs || 'Normal'})
+Ability: Synchronize
+EVs: 252 Atk / 4 SpD / 252 Spe
+Jolly Nature
+- Tackle
+- Protect`;
+    }).join('\n\n');
+  };
+
+  const handleCopyShowdown = () => {
+    navigator.clipboard.writeText(generateShowdownExport());
+    setCopied(true);
+    playSound.click();
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleImportShowdown = () => {
+    if (!importText.trim()) return;
+    // Extraer nombres de las primeras líneas de bloques
+    const blocks = importText.split(/\n\n+/);
+    const importedNames = blocks.map(b => {
+      const firstLine = b.trim().split('\n')[0];
+      const name = firstLine.split('(')[0].trim().toLowerCase();
+      return name;
+    }).filter(Boolean);
+
+    if (onImportTeam) {
+      onImportTeam(importedNames);
+      playSound.fanfare();
+      setShowImportModal(false);
+      setImportText('');
     }
   };
 
@@ -34,7 +78,32 @@ export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSel
           </p>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          {team.length > 0 && (
+            <button
+              onClick={() => {
+                playSound.click();
+                setShowExportModal(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 transition-all"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Exportar Showdown
+            </button>
+          )}
+
+          <button
+            onClick={() => {
+              playSound.click();
+              setShowImportModal(true);
+            }}
+            aria-label="Importar Showdown"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 transition-all"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            Importar Showdown
+          </button>
+
           {team.length > 0 && (
             <button
               onClick={handleClear}
@@ -44,13 +113,14 @@ export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSel
               Vaciar
             </button>
           )}
+
           {onClose && (
             <button
               onClick={onClose}
               className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold text-white/50 bg-white/5 hover:bg-white/10 transition-all"
             >
               <X className="w-4 h-4" />
-              Volver a Pokédex
+              Volver
             </button>
           )}
         </div>
@@ -125,7 +195,7 @@ export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSel
         })}
       </div>
 
-      {/* Análisis de Debilidades y Resistencias del Equipo */}
+      {/* Análisis de Debilidades y Resistencias */}
       {team.length > 0 && (
         <div className="bg-white/[.03] border border-white/5 rounded-2xl p-5 mb-6">
           <div className="flex items-center gap-2 mb-4">
@@ -171,6 +241,69 @@ export default function TeamBuilder({ team, onRemoveFromTeam, onClearTeam, onSel
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* Modal Exportar Showdown */}
+      {showExportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                <Download className="w-4 h-4 text-cyan-400" /> Exportar a Pokémon Showdown
+              </h3>
+              <button onClick={() => setShowExportModal(false)} className="text-white/40 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <textarea
+              readOnly
+              rows={8}
+              value={generateShowdownExport()}
+              className="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs font-mono text-cyan-300 focus:outline-none mb-4"
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={handleCopyShowdown}
+                className="flex items-center gap-1.5 px-4 py-2 bg-cyan-500 text-slate-900 font-bold rounded-xl text-xs"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? '¡Copiado!' : 'Copiar al Portapapeles'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Importar Showdown */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                <Upload className="w-4 h-4 text-amber-400" /> Importar desde Pokémon Showdown
+              </h3>
+              <button onClick={() => setShowImportModal(false)} className="text-white/40 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-xs text-white/50 mb-3">Pega la plantilla de equipo de Pokémon Showdown:</p>
+            <textarea
+              rows={8}
+              value={importText}
+              onChange={e => setImportText(e.target.value)}
+              placeholder={`Pikachu\nAbility: Static\nJolly Nature\n\nCharizard\nAbility: Blaze\nTimmi Nature`}
+              className="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-xs font-mono text-white placeholder-white/20 focus:outline-none mb-4"
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={handleImportShowdown}
+                className="flex items-center gap-1.5 px-4 py-2 bg-amber-400 text-slate-900 font-bold rounded-xl text-xs"
+              >
+                <Upload className="w-4 h-4" /> Cargar Equipo
+              </button>
+            </div>
           </div>
         </div>
       )}

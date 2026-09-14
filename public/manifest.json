@@ -1,0 +1,15 @@
+{
+  "name": "Pokédex Interactiva (Kanto a Paldea)",
+  "short_name": "Pokédex",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0c14",
+  "theme_color": "#dc2626",
+  "icons": [
+    {
+      "src": "/pokeball.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

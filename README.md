@@ -6,61 +6,46 @@ Una aplicación web moderna e interactiva inspirada en los dispositivos físicos
 
 ## ✨ Funcionalidades Principales
 
-### 1. 🌍 Base de Datos Nacional Completa (1 al 1025)
-- **Todas las 9 Generaciones**:
-  - **Gen I (Kanto)**: #0001 - #0151
-  - **Gen II (Johto)**: #0152 - #0251
-  - **Gen III (Hoenn)**: #0252 - #0386
-  - **Gen IV (Sinnoh)**: #0387 - #0493
-  - **Gen V (Unova / Teselia)**: #0494 - #0649
-  - **Gen VI (Kalos)**: #0650 - #0721
-  - **Gen VII (Alola)**: #0722 - #0809
-  - **Gen VIII (Galar)**: #0810 - #0905
-  - **Gen IX (Paldea)**: #0906 - #1025
-  - **Nacional**: Exploración fluida de toda la Pokédex.
-- **Búsqueda Global Instantánea**: Indexación en memoria de los 1025 Pokémon que permite encontrar cualquier especie en milisegundos por nombre o número de Pokédex, sin importar en qué generación te encuentres.
+### 1. ⚔️ Comparador Avanzado con Naturalezas y Niveles Competitivos
+- **Selección Libre de Combatientes**: Buscador predictivo con autocompletado para elegir libremente cualquier Pokémon vs cualquier Pokémon.
+- **25 Naturalezas Oficiales** (*Firme, Alegre, Modesta, Miedosa, Osada, Serena, etc.*):
+  - Aplica los modificadores oficiales (+10% ▲ verde / -10% ▼ rojo) sobre la estadística correspondiente.
+- **Selector de Modo de Nivel**:
+  - **Stats Base**: Valores base directos (BST).
+  - **Nivel 50 (VGC / Competitivo)**: Estadísticas reales calculadas con la fórmula matemática oficial.
+  - **Nivel 100**: Estadísticas reales al nivel máximo.
+- **Gráficos de Radar Hexagonal SVG**: Comparación geométrica visual de los atributos.
 
-### 2. 🎮 9 Modelos de Pokédex Seleccionables
-El chasis del dispositivo se adapta visualmente según la región seleccionada:
-- **Kanto (Gen I)**: Rojo clásico con lente azul parpadeante.
-- **Johto (Gen II)**: Azul cobalto y dorados de Oro/Plata/Cristal.
-- **Hoenn (Gen III)**: Verde esmeralda de Rubí/Zafiro/Esmeralda.
-- **Sinnoh (Gen IV)**: Púrpura y cian estilo pantalla dual Nintendo DS.
-- **Unova (Gen V)**: Magenta y cian moderno.
-- **Kalos (Gen VI)**: Naranja y verde lima holográfico.
-- **Alola (Gen VII)**: Estilo Rotom Dex con pantalla de alta tecnología.
-- **Galar (Gen VIII)**: Índigo y carmesí estilo smartphone/Rotom Phone.
-- **Paldea (Gen IX)**: Fucsia y ámbar de última generación.
+### 2. ✨ Toggle Variocolor (Shiny)
+- Alterna entre los sprites oficiales estándar y sus variantes Shiny con destellos animados en tarjetas, modal y comparador.
 
-### 3. 🛡️ Creador de Equipos (Team Builder)
-- Crea y organiza tu equipo de combate de hasta **6 Pokémon**.
-- **Análisis de Vulnerabilidades**: Matriz que calcula cuántos miembros son débiles, resistentes o inmunes a cada uno de los 18 tipos elementales.
-- Alertas visuales si tu equipo comparte 3 o más debilidades contra un mismo tipo.
-- Persistencia automática en el navegador vía `localStorage`.
+### 3. 📊 Gráficos de Radar Hexagonal SVG
+- Visualización de polígonos dinámicos en SVG para representar el balance de estadísticas base en la ficha y comparativa.
 
-### 4. ⚔️ Comparador Pokémon (Modo Versus)
-- Enfrentamiento cara a cara entre 2 Pokémon:
-  - Gráficos de barras enfrentados con corona de victoria 👑 en cada estadística base (PS, Ataque, Defensa, At. Especial, Def. Especial, Velocidad).
-  - Declaración del ganador por **BST** (Base Stat Total).
-  - Cálculo de **Efectividad Elemental**: Calcula el multiplicador de daño que cada uno causaría al otro (Súper eficaz x2 / x4, No muy eficaz x0.5 / x0.25 o Sin efecto x0).
-  - Botón de generación aleatoria para descubrir enfrentamientos curiosos.
+### 4. 📜 Movimientos y MTs/MOs
+- Pestaña de ataques en la ficha del Pokémon con desglose por método (nivel, MT/MO, tutor, huevo).
 
-### 5. 📍 Lugares de Captura en los Juegos
-- Cada ficha de Pokémon incluye la pestaña **"Ubicaciones"**, que consulta la API para detallar las rutas, cuevas, lagos y zonas de encuentro en cada versión de juego (Rojo Fuego, Esmeralda, Platino, etc.) con sus porcentajes de aparición y métodos (hierba, pesca, surf).
+### 5. 🧬 Formas Regionales y Alternativas
+- Selector de variedades (Alola, Galar, Hisui, Paldea, Megas, Gigamax) dentro de la ficha de la especie.
 
-### 6. 🔊 Audio Oficial y Motor Retro 8-Bit
-- **Grito Oficial de cada Pokémon**: Reproducción del audio del rugido/grito oficial provisto por PokéAPI.
-- **Efectos de Sonido Retro (SFX)**: Sintetizados proceduralmente con **Web Audio API** (bips de botones, selección, añadir al equipo, fanfarria de victoria).
-- **Música Chiptune de Fondo (BGM)**: Melodía retro estilo Game Boy que puedes encender/pausar desde el bisel de la Pokédex.
+### 6. 🎮 Mini-Juego "¿Quién es ese Pokémon?"
+- Trivia interactiva con silueta en negro, 4 opciones de respuesta, sonido retro y contador de racha.
 
-### 7. 🧬 Cadena Evolutiva Visual
-- Muestra la línea completa de evoluciones con sprites oficiales, niveles mínimos requeridos o piedras/objetos evolutivos necesarios.
+### 7. 📤 Importador y Exportador Pokémon Showdown
+- Exportación e importación directa del equipo de 6 Pokémon en formato texto estándar para Pokémon Showdown.
 
-### 8. 🌐 Todo en Español Latino
-- Descripciones de la Pokédex en español oficial.
-- Nombres de tipos traducidos (Planta, Fuego, Agua, Hada, Siniestro, etc.).
-- Estadísticas en español (PS, Ataque, Defensa, At. Esp, Def. Esp, Velocidad).
-- Hábitats, categorías y versiones de juegos traducidas.
+### 8. 🌍 Base de Datos Nacional Completa (1 al 1025)
+- Selector de Generaciones de la Gen I a la IX y Nacional.
+- Búsqueda global instantánea con indexación en memoria.
+
+### 9. 🛡️ Team Builder (Creador de Equipos)
+- Matriz de análisis de debilidades y resistencias del equipo de 6 con persistencia en `localStorage`.
+
+### 10. 🔊 Audio 8-Bit & Gritos Oficiales
+- Sintetizador 8-bit nativo con Web Audio API (efectos de sonido y música chiptune BGM) más gritos de audio oficiales.
+
+### 11. ⚡ Soporte PWA / Offline
+- Incluye `manifest.json` y `sw.js` (Service Worker) para instalación nativa y caché sin conexión.
 
 ---
 
@@ -70,43 +55,20 @@ El chasis del dispositivo se adapta visualmente según la región seleccionada:
 - **Estilos**: [Tailwind CSS 3](https://tailwindcss.com/)
 - **Iconografía**: [Lucide React](https://lucide.dev/)
 - **Peticiones HTTP**: [Axios](https://axios-http.com/)
-- **Audio**: [Web Audio API](https://developer.mozilla.org/es/docs/Web/API/Web_Audio_API) (Sintetizador 8-bit nativo sin dependencias externas)
+- **Audio**: [Web Audio API](https://developer.mozilla.org/es/docs/Web/API/Web_Audio_API)
 - **Fuente de Datos**: [PokéAPI v2](https://pokeapi.co/)
 
 ---
 
 ## 🚀 Instalación y Ejecución
 
-### Requisitos previos
-- [Node.js](https://nodejs.org/) v18 o superior.
-- Gestor de paquetes `npm`.
+```bash
+cd "/home/ecuellar/Documentos/Pokedex Interactiva"
+npm run dev
+```
 
-### Pasos
-
-1. Clonar o acceder a la carpeta del proyecto:
-   ```bash
-   cd "/home/tuusuario/Documentos/Pokedex Interactiva"
-   ```
-
-2. Instalar dependencias:
-   ```bash
-   npm install
-   ```
-
-3. Iniciar el servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
-
-4. Abrir en el navegador:
-   ```
-   http://localhost:5173/
-   ```
-
-5. Para compilar a producción:
-   ```bash
-   npm run build
-   ```
+Abre en tu navegador:
+`http://localhost:5174/` (o `http://localhost:5173/`)
 
 ---
 
@@ -114,19 +76,20 @@ El chasis del dispositivo se adapta visualmente según la región seleccionada:
 
 ```
 Pokedex Interactiva/
-├── index.html                   # Entrada HTML con fuentes Google Fonts (Inter, JetBrains Mono)
+├── index.html                   # Entrada HTML con fuentes Google Fonts y PWA Service Worker
+├── manifest.json                # PWA Web App Manifest
+├── sw.js                        # Service Worker de caché offline
 ├── package.json                 # Dependencias y scripts
 ├── vite.config.js               # Configuración del bundler Vite
 ├── tailwind.config.js           # Configuración de clases y paleta Tailwind
-├── public/
-│   └── pokeball.svg             # Favicon vectorial de Pokébola
 └── src/
     ├── main.jsx                 # Render inicial de React
     ├── App.jsx                  # Coordinador de estado, vistas, filtros y 1025 Pokémon
     ├── index.css                # Variables CSS por modelo de Pokédex, animaciones y tipos
     ├── services/
     │   ├── pokeApi.js           # Cliente API, lista maestra de 1025, tabla de tipos y generaciones
-    │   └── audioService.js      # Sintetizador Web Audio API de SFX y chiptune BGM
+    │   ├── audioService.js      # Sintetizador Web Audio API de SFX y chiptune BGM
+    │   └── natureService.js     # Base de datos de 25 naturalezas y fórmulas de cálculo
     ├── utils/
     │   └── helpers.js           # Almacenamiento local, cálculos de efectividad y formateo
     └── components/
@@ -136,38 +99,13 @@ Pokedex Interactiva/
         ├── Header.jsx           # Buscador, botón aleatorio y favoritos
         ├── TypeFilter.jsx       # Selector de los 18 tipos elementales y ordenamiento
         ├── PokemonGrid.jsx      # Cuadrícula responsive con skeleton loaders
-        ├── PokemonCard.jsx      # Tarjeta con acciones rápidas (equipo, comparar, favorito)
-        ├── PokemonModal.jsx     # Ficha detallada (Info, Stats, Evolución, Ubicaciones, Grito)
-        ├── TeamBuilder.jsx      # Creador de equipos de 6 con análisis de vulnerabilidades
-        └── PokemonComparator.jsx# Modo Versus cara a cara con cálculo de efectividad
+        ├── PokemonCard.jsx      # Tarjeta con acciones rápidas (equipo, comparar, favorito, shiny)
+        ├── PokemonModal.jsx     # Ficha detallada (Info, Stats, Radar, Ataques, Evolución, Ubicaciones)
+        ├── TeamBuilder.jsx      # Creador de equipos de 6 con análisis de tipos e import/export Showdown
+        ├── PokemonComparator.jsx# Modo Versus con selector de Naturalezas (Base/50/100) y Radar
+        ├── StatRadarChart.jsx   # Gráfico de radar poligonal dinámico en SVG
+        └── WhosThatPokemon.jsx  # Mini-Juego interactivo de adivinanza de siluetas
 ```
-
----
-
-## 🔮 Cosas a Mejorar / Roadmap Futuro
-
-Ideas y funcionalidades recomendadas para futuras iteraciones del proyecto:
-
-1. **✨ Toggle de Versión Variocolor (Shiny)**:
-   - Añadir un botón o estrella en la tarjeta y modal para alternar entre el sprite regular y el sprite Shiny con destellos animados.
-
-2. **⚔️ Movimientos y MTs/MOs**:
-   - Agregar una pestaña de "Movimientos" en el modal que liste los ataques que aprende por nivel, MT/DT o tutor, con su potencia, precisión y descripción en español.
-
-3. **🧬 Formas Regionales y Formas Alternativas**:
-   - Incluir selector para Formas de Alola, Galar, Hisui, Paldea, Megaevoluciones, Formas Gigamax y formas especiales (ej. Rotom, Deoxys, Ogerpon).
-
-4. **🎮 Mini-Juego "¿Quién es ese Pokémon?"**:
-   - Modo de juego casual con la silueta en negro del Pokémon, sonido clásico del anime y opciones de respuesta con puntuación y rachas.
-
-5. **📤 Exportador / Importador de Equipos (Formato Showdown)**:
-   - Capacidad de copiar el equipo en formato texto estándar de Pokémon Showdown para compartirlo o importarlo directamente.
-
-6. **⚡ Soporte Offline (PWA / Service Worker)**:
-   - Convertir la Pokédex en una Progressive Web App (PWA) con caché local de sprites e información para consultarla sin conexión a internet.
-
-7. **📊 Gráfico de Radar para Estadísticas**:
-   - Renderizar las estadísticas base en un gráfico poligonal de radar hexagonal además de las barras horizontales.
 
 ---
 
