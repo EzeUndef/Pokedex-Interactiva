@@ -63,7 +63,7 @@ Una aplicación web moderna e interactiva inspirada en los dispositivos físicos
 ## 🚀 Instalación y Ejecución
 
 ```bash
-cd "/home/ecuellar/Documentos/Pokedex Interactiva"
+cd "/home/tuusuario/Documentos/Pokedex Interactiva"
 npm run dev
 ```
 
